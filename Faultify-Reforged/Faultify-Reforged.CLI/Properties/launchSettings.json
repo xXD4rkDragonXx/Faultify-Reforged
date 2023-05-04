@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Faultify-Reforged.CLI": {
+      "commandName": "Project"
+    },
+    "Faultify-Reforged.CLI With Args": {
+      "commandName": "Project",
+      "commandLineArgs": "-i \"C:\\Repositories\\GitHub\\Plygrnd\\Plygrnd.sln\""
+    }
+  }
+}

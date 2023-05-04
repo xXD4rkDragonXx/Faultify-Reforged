@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faultify-Reforged", "Faultify-Reforged\Faultify-Reforged.csproj", "{135BCF6E-D105-40E6-9669-714F18F9231C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faultify-Reforged.Core", "Faultify-Reforged\Faultify-Reforged.Core.csproj", "{135BCF6E-D105-40E6-9669-714F18F9231C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faultify-Reforged.CLI", "Faultify-Reforged.CLI\Faultify-Reforged.CLI.csproj", "{C086F347-1B24-4BBD-9E01-9C04977BD214}"
 EndProject

@@ -1,4 +1,4 @@
-﻿namespace Faultify_Reforged
+﻿namespace Faultify_Reforged.Core
 {
     /// <summary>
     /// The main core of Faultify Reforged

@@ -22,7 +22,8 @@ namespace Faultify_Reforged.CLI
   ██████╔╝█████╗  █████╗  ██║   ██║██████╔╝██║  ███╗█████╗  ██║  ██║
   ██╔══██╗██╔══╝  ██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  ██║  ██║
   ██║  ██║███████╗██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗██████╔╝
-  ╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═════╝";
+  ╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═════╝
+";
             return _logo;
         }
 
@@ -35,6 +36,15 @@ namespace Faultify_Reforged.CLI
             {
                 Console.ForegroundColor = currentColor;
             }
+        }
+
+        public static void printOptions(Options options)
+        {
+            var currentColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine($"Input Project: {options.InputProject}");
+            Console.WriteLine($"Output Location: {(options.OutputLocation != null ? options.OutputLocation : "Default")}");
+            Console.ForegroundColor = currentColor;
         }
     }
 }
