@@ -2,6 +2,9 @@
 
 namespace Faultify_Reforged.CLI
 {
+    /// <summary>
+    /// Contains all the Commandline options.
+    /// </summary>
     internal class Options
     {
         [Option('i', "inputproject", Required = true, HelpText = "Input Project .sln file location")]

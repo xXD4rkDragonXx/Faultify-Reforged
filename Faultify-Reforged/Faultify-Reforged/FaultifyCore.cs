@@ -7,8 +7,8 @@ namespace Faultify_Reforged.Core
     /// </summary>
     public class FaultifyCore
     {
-        string inputProject;
-        string? outputProject;
+        readonly string inputProject;
+        readonly string? outputProject;
 
         /// <summary>
         /// Creates an instance of the core.
@@ -33,6 +33,7 @@ namespace Faultify_Reforged.Core
 
         public static List<IMutation> GetMutations()
         {
+            
             return null;
         }
     }

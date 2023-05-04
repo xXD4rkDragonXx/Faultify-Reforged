@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Faultify_Reforged.CLI
+﻿namespace Faultify_Reforged.CLI
 {
+    /// <summary>
+    /// The class for Console messages.
+    /// </summary>
     internal class ConsoleMessages
     {
+        /// <summary>
+        /// Provides The commandline version of the logo of the application
+        /// </summary>
+        /// <returns>The commandline version of the logo</returns>
         public static string GetLogo()
         {
             var _logo = @"
@@ -27,6 +28,12 @@ namespace Faultify_Reforged.CLI
             return _logo;
         }
 
+        /// <summary>
+        /// Prints information the the command line in the given color
+        /// </summary>
+        /// <param name="message">Message to print</param>
+        /// <param name="consoleColor">Color to print the message in</param>
+        /// <param name="keepColor">Keep the color for future messages</param>
         public static void printMessage(string message, ConsoleColor consoleColor = ConsoleColor.Cyan, bool keepColor = false)
         {
             var currentColor = Console.ForegroundColor;
