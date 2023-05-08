@@ -45,12 +45,17 @@
             }
         }
 
+        /// <summary>
+        /// Print the options 
+        /// </summary>
+        /// <param name="options"></param>
         public static void printOptions(Options options)
         {
             var currentColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine($"Input Project: {options.InputProject}");
             Console.WriteLine($"Output Location: {(options.OutputLocation != null ? options.OutputLocation : "Default")}");
+            Console.WriteLine($"Input Project: {(options.MutationLocation != null ? options.MutationLocation : "Default")}");
             Console.ForegroundColor = currentColor;
         }
     }

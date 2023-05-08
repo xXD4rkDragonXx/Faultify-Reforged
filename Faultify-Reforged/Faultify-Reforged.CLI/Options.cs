@@ -12,5 +12,8 @@ namespace Faultify_Reforged.CLI
 
         [Option('o', "outputlocation", Required = false, HelpText = "Location for output")]
         public string? OutputLocation { get; set; }
+
+        [Option('m', "mutationlocation", Required = false, HelpText = "Folder containing the mutations")]
+        public string MutationLocation { get; set; }
     }
 }

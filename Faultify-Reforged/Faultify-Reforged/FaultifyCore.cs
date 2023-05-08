@@ -14,18 +14,22 @@ namespace Faultify_Reforged.Core
         /// Creates an instance of the core.
         /// </summary>
         /// <param name="inputProject">The sln file location</param>
-        public FaultifyCore(string inputProject)
+        /// <param name="mutationLocation">The Folder containting the mutation files</param>
+        public FaultifyCore(string inputProject, string mutationLocation)
         {
             this.inputProject = inputProject;
             ProjectLoader projectLoader = new ProjectLoader(inputProject);
+            List<IMutation> mutations = MutationLoader.LoadMutations(mutationLocation);
+
         }
 
         /// <summary>
         /// Creates an instance of the core with an output location.
         /// </summary>
         /// <param name="inputProject">The sln file location</param>
+        /// <param name="mutationLocation">The Folder containting the mutation files</param>
         /// <param name="outputLocation">Location to put the output</param>
-        public FaultifyCore(string inputProject, string outputLocation)
+        public FaultifyCore(string inputProject, string mutationLocation, string outputLocation)
         {
             this.inputProject = inputProject;
             this.outputProject = outputLocation;

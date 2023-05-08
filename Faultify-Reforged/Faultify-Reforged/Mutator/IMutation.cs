@@ -2,14 +2,9 @@
 {
     public interface IMutation
     {
-        string Name { get; }
-
-        string Description { get; }
-
-        string Identifier { get; }
-
-        public string Mutation();
-
-        void Run() { }
+        string Name { get; set; }
+        string Description { get; set; }
+        string Identifier { get; set; }
+        string[] Mutations { get; set; }
     }
 }
