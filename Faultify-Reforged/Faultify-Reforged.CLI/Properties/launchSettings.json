@@ -5,7 +5,7 @@
     },
     "Faultify-Reforged.CLI With Args": {
       "commandName": "Project",
-      "commandLineArgs": "-i \"C:\\Repositories\\GitHub\\Plygrnd\\Plygrnd.sln\""
+      "commandLineArgs": "-i \"C:\\Repositories\\GitHub\\Plygrnd\\Plygrnd.sln\"\r\n-m \"C:\\Repositories\\GitHub\\Faultify-Reforged\\Faultify-Reforged\\Faultify-Reforged\\Mutator\\Mutations\""
     }
   }
 }

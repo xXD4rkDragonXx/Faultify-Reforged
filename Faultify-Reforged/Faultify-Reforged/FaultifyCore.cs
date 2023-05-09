@@ -19,8 +19,18 @@ namespace Faultify_Reforged.Core
         {
             this.inputProject = inputProject;
             ProjectLoader projectLoader = new ProjectLoader(inputProject);
+            if(mutationLocation == null)
+            {
+                mutationLocation = $"{Directory.GetCurrentDirectory()}\\Mutator\\Mutations";
+            }
             List<IMutation> mutations = MutationLoader.LoadMutations(mutationLocation);
-
+            foreach (var compilation in projectLoader.getSolutionCompilations())
+            {
+                foreach (Mutation mutation in mutations)
+                {
+                    ASTMutator.Mutate(compilation.Value, mutation);
+                }
+            }
         }
 
         /// <summary>

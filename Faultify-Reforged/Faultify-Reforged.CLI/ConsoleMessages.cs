@@ -55,7 +55,7 @@
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine($"Input Project: {options.InputProject}");
             Console.WriteLine($"Output Location: {(options.OutputLocation != null ? options.OutputLocation : "Default")}");
-            Console.WriteLine($"Input Project: {(options.MutationLocation != null ? options.MutationLocation : "Default")}");
+            Console.WriteLine($"Mutation Location: {(options.MutationLocation != null ? options.MutationLocation : "Default")}");
             Console.ForegroundColor = currentColor;
         }
     }
