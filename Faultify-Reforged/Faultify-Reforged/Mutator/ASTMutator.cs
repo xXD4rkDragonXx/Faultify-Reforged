@@ -12,8 +12,6 @@ namespace Faultify_Reforged.Core.Mutator
             {
                 var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-                var rewriter = new TypeInferenceRewriter(semanticModel);
-
                 var rootNode = syntaxTree.GetRoot();
                 var classDeclarations = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
                 var methodDeclarations = rootNode.DescendantNodes().OfType<MethodDeclarationSyntax>();

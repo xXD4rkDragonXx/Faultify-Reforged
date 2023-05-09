@@ -22,7 +22,7 @@ namespace Faultify_Reforged.Core.Mutator
                     mutations.Add(mutation.ToObject<Mutation>());
                 } else
                 {
-                    Console.WriteLine($"[WARNING] The command at {mutationFile} is missing a required \"Name\", \"Description\", \"Identifier\" or \"Mutations\" property.");
+                    Console.WriteLine($"[WARNING] The mutation at {mutationFile} is missing a required \"Name\", \"Description\", \"Identifier\" or \"Mutations\" property.");
                 }
             }
             
