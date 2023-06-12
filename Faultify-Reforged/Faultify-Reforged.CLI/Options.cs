@@ -15,5 +15,8 @@ namespace Faultify_Reforged.CLI
 
         [Option('m', "mutationlocation", Required = false, HelpText = "Folder containing the mutations")]
         public string MutationLocation { get; set; }
+
+        [Option('r', "runners", Required = false, HelpText = "Amount of testrunners")]
+        public int RunnerAmount { get; set;}
     }
 }
