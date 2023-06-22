@@ -18,6 +18,7 @@ namespace Faultify_Reforged.CLI
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options => RunOptions(options))
                 .WithNotParsed(err => HandleParseErrors(err));
+
         }
 
         /// <summary>
@@ -26,6 +27,10 @@ namespace Faultify_Reforged.CLI
         /// <param name="err"></param>
         private static void HandleParseErrors(IEnumerable<Error> err)
         {
+            foreach (var error in err)
+            {
+                Console.Error.WriteLine(error);
+            }
             return;
         }
 
@@ -36,7 +41,7 @@ namespace Faultify_Reforged.CLI
         static void RunOptions(Options options)
         {
             ConsoleMessages.printOptions(options);
-            FaultifyCore faultify_Reforged = new FaultifyCore(options.InputProject, options.MutationLocation);
+            FaultifyCore faultify_Reforged = new FaultifyCore(options.InputProject, options.InputProjectTestLocation, options.MutationLocation);
         }
     }
 }

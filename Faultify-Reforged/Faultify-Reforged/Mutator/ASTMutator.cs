@@ -15,7 +15,7 @@ namespace Faultify_Reforged.Core.Mutator
             {
                 SyntaxNode rootNode = syntaxTree.GetRoot();
                 
-                RegexSyntaxRewriter regexSyntaxRewriter = new RegexSyntaxRewriter(mutation.Identifier, mutation.Mutations);
+                RegexSyntaxRewriter regexSyntaxRewriter = new RegexSyntaxRewriter(mutation.Identifier, mutation.Mutations[0]);
                 SyntaxNode newRootNode = regexSyntaxRewriter.Visit(rootNode);
 
                 SyntaxTree newSyntaxTree = syntaxTree.WithRootAndOptions(newRootNode, syntaxTree.Options);

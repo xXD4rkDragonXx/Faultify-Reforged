@@ -19,7 +19,9 @@ namespace Faultify_Reforged.Core.Mutator
             {
                 var mutation = JObject.Parse(File.ReadAllText(mutationFile));
                 if (mutation.ContainsKey("Name") && mutation.ContainsKey("Description") && mutation.ContainsKey("Identifier") && mutation.ContainsKey("Mutations")) {
-                    mutations.Add(mutation.ToObject<Mutation>());
+                    mutations.Add(
+                        StripMutationIdentifiers(mutation.ToObject<Mutation>())
+                    );
                 } else
                 {
                     Console.WriteLine($"[WARNING] The mutation at {mutationFile} is missing a required \"Name\", \"Description\", \"Identifier\" or \"Mutations\" property.");
@@ -27,6 +29,17 @@ namespace Faultify_Reforged.Core.Mutator
             }
             
             return mutations;
+        }
+
+        public static Mutation StripMutationIdentifiers(Mutation mutation)
+        {
+            string newIdentifier = mutation.Identifier.Replace("\\\\", "\\");
+            mutation.Identifier = newIdentifier;
+            for(var i = 0;  i < mutation.Mutations.Count(); i++)
+            {
+                mutation.Mutations[i] = mutation.Mutations[i].Replace("\\\\", "\\");
+            }
+            return mutation;
         }
     }
 }

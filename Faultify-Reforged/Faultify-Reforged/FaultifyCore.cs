@@ -1,4 +1,6 @@
 ﻿using Faultify_Reforged.Core.Mutator;
+using Faultify_Reforged.Core.ProjectBuilder;
+using Microsoft.CodeAnalysis;
 
 namespace Faultify_Reforged.Core
 {
@@ -15,10 +17,12 @@ namespace Faultify_Reforged.Core
         /// Creates an instance of the core.
         /// </summary>
         /// <param name="inputProject">The sln file location</param>
+        /// <param name="testProjectLocation">The test project file location</param>
         /// <param name="mutationLocation">The Folder containting the mutation files</param>
-        public FaultifyCore(string inputProject, string mutationLocation)
+        public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation)
         {
             this.inputProject = inputProject;
+            GenerateProject(testProjectLocation);
             ProjectLoader projectLoader = new ProjectLoader(inputProject);
             if(mutationLocation == null)
             {
@@ -27,28 +31,31 @@ namespace Faultify_Reforged.Core
             List<IMutation> mutations = GetMutations(mutationLocation);
             foreach (var compilation in projectLoader.getSolutionCompilations())
             {
-                if (TestProjectDetector.IsTestProject(compilation.Value))
+                if (!TestProjectDetector.IsTestProject(compilation.Value))
                 {
                     foreach (Mutation mutation in mutations)
                     {
                         var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation);
                         var x = mutatedCompilation.AssemblyName;
-                        string outputLocation = $"C:\\FaultifyReforgedOutput\\{mutatedCompilation.AssemblyName}";
+                        string outputLocation = $"C:\\FaultifyReforgedOutput\\{mutatedCompilation.AssemblyName}.dll";
                         ASTMutator.compileCodeToLocation(mutatedCompilation, outputLocation);
                     }
                 }
             }
 
             // run testrunner
+
+
         }
 
         /// <summary>
         /// Creates an instance of the core with an output location.
         /// </summary>
         /// <param name="inputProject">The sln file location</param>
+        /// <param name="testProjectLocation">The test project file location</param>
         /// <param name="mutationLocation">The Folder containting the mutation files</param>
         /// <param name="outputLocation">Location to put the output</param>
-        public FaultifyCore(string inputProject, string mutationLocation, string outputLocation)
+        public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation, string outputLocation)
         {
             this.inputProject = inputProject;
             this.outputProject = outputLocation;
@@ -58,6 +65,13 @@ namespace Faultify_Reforged.Core
         public static List<IMutation> GetMutations(string mutationLocation)
         {
             return MutationLoader.LoadMutations(mutationLocation);
+        }
+
+        private static void GenerateProject(string projectPath)
+        {
+            var analyserResult = TestProjectGenerator.GenerateTestProject(projectPath);
+            ProjectDuplicator projectDuplicator = new ProjectDuplicator(Directory.GetParent(analyserResult.AssemblyPath).FullName);
+            projectDuplicator.MakeInitialCopies(2);
         }
     }
 }

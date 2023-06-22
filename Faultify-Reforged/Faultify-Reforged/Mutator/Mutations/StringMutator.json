@@ -1,7 +1,7 @@
 {
   "Name": "StringMutator",
   "Description": "Mutates a string",
-  "Identifier": "\"*\"",
+  "Identifier": "Hello World",
   "Mutations": [
     "MUTATED STRING"
   ]
