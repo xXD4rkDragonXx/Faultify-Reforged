@@ -32,7 +32,6 @@ namespace Faultify_Reforged.Core
         private async Task<Dictionary<string, Compilation>> LoadProjectSolution()
         {
             //Register MSBuild location so it can be used. (Otherwise all compilations will be null)
-            MSBuildLocator.RegisterDefaults();
             try
             {
                 using (var workspace = MSBuildWorkspace.Create())
