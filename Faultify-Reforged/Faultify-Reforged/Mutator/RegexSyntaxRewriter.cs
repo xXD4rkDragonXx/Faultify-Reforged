@@ -9,9 +9,9 @@ namespace Faultify_Reforged.Core.Mutator
     {
 
         string findPattern;
-        string replacementString;
+        string[] replacementString;
 
-        public RegexSyntaxRewriter(string findPattern, string replacementString) 
+        public RegexSyntaxRewriter(string findPattern, string[] replacementString) 
         {
             this.findPattern = findPattern;
             this.replacementString = replacementString;
@@ -25,7 +25,7 @@ namespace Faultify_Reforged.Core.Mutator
             foreach (Match regexMatch in regexMatches)
             {
                 modifiedTreeString = modifiedTreeString.Remove(regexMatch.Index, regexMatch.Length);
-                modifiedTreeString = modifiedTreeString.Insert(regexMatch.Index, replacementString);
+                modifiedTreeString = modifiedTreeString.Insert(regexMatch.Index, replacementString[0]);
             }
 
             SyntaxNode modfiedNode = SyntaxFactory.ParseStatement(modifiedTreeString);
@@ -38,12 +38,12 @@ namespace Faultify_Reforged.Core.Mutator
             this.findPattern = findPattern;
         }
 
-        public void SetReplacementString (string replacementString)
+        public void SetReplacementString (string[] replacementString)
         {
             this.replacementString = replacementString;
         }
 
-        public void SetValues (string findPattern, string replacementString)
+        public void SetValues (string findPattern, string[] replacementString)
         {
             this.findPattern = findPattern;
             this.replacementString = replacementString;

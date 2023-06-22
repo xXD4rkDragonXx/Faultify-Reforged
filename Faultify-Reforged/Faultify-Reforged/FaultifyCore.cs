@@ -9,6 +9,7 @@ namespace Faultify_Reforged.Core
     {
         readonly string inputProject;
         readonly string? outputProject;
+        readonly string? mutationLocation;
 
         /// <summary>
         /// Creates an instance of the core.
@@ -23,14 +24,22 @@ namespace Faultify_Reforged.Core
             {
                 mutationLocation = $"{Directory.GetCurrentDirectory()}\\Mutator\\Mutations";
             }
-            List<IMutation> mutations = MutationLoader.LoadMutations(mutationLocation);
+            List<IMutation> mutations = GetMutations(mutationLocation);
             foreach (var compilation in projectLoader.getSolutionCompilations())
             {
-                foreach (Mutation mutation in mutations)
+                if (TestProjectDetector.IsTestProject(compilation.Value))
                 {
-                    ASTMutator.Mutate(compilation.Value, mutation);
+                    foreach (Mutation mutation in mutations)
+                    {
+                        var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation);
+                        var x = mutatedCompilation.AssemblyName;
+                        string outputLocation = $"C:\\FaultifyReforgedOutput\\{mutatedCompilation.AssemblyName}";
+                        ASTMutator.compileCodeToLocation(mutatedCompilation, outputLocation);
+                    }
                 }
             }
+
+            // run testrunner
         }
 
         /// <summary>
@@ -43,12 +52,12 @@ namespace Faultify_Reforged.Core
         {
             this.inputProject = inputProject;
             this.outputProject = outputLocation;
+            this.mutationLocation = mutationLocation;
         }
 
-        public static List<IMutation> GetMutations()
+        public static List<IMutation> GetMutations(string mutationLocation)
         {
-            
-            return null;
+            return MutationLoader.LoadMutations(mutationLocation);
         }
     }
 }

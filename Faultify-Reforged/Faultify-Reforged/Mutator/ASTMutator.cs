@@ -1,54 +1,45 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace Faultify_Reforged.Core.Mutator
 {
     internal class ASTMutator
     {
 
-        public static void Mutate(Compilation compilation, Mutation mutation)
+        public static Compilation Mutate(Compilation compilation, Mutation mutation)
         {
+            Compilation newCompilation = compilation;
             foreach (SyntaxTree syntaxTree in compilation.SyntaxTrees)
             {
-                var semanticModel = compilation.GetSemanticModel(syntaxTree);
-
-                var rootNode = syntaxTree.GetRoot();
+                SyntaxNode rootNode = syntaxTree.GetRoot();
                 
+                RegexSyntaxRewriter regexSyntaxRewriter = new RegexSyntaxRewriter(mutation.Identifier, mutation.Mutations);
+                SyntaxNode newRootNode = regexSyntaxRewriter.Visit(rootNode);
 
-                RegexSyntaxRewriter regexSyntaxRewriter = new RegexSyntaxRewriter("",""); //TODO ADD CORRECT CODE
+                SyntaxTree newSyntaxTree = syntaxTree.WithRootAndOptions(newRootNode, syntaxTree.Options);
 
-
-                //Get everything
-                var classDeclarations = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
-                var methodDeclarations = rootNode.DescendantNodes().OfType<MethodDeclarationSyntax>();
-                // Loop through all classes
-                foreach (var classDeclaration in classDeclarations)
-                {
-                    var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
-                    Console.WriteLine(classSymbol);
-                }
-                // Loop through all methods
-                foreach (var methodDeclaration in methodDeclarations)
-                {
-                    var statementSyntaxes = methodDeclaration.Body.Statements;
-                    foreach (var statement in statementSyntaxes)
-                    {
-                        //Console.WriteLine(statement);
-
-                    }
-                    Console.WriteLine(methodDeclaration);
-                }
-
+                newCompilation = newCompilation.ReplaceSyntaxTree(syntaxTree, newSyntaxTree);
             }
-            
+            return newCompilation;
         }
 
-        //TODO: Fix or Remove
-        public static SyntaxTree CodeStringToSyntaxTree(string codeString)
+        public static bool compileCodeToLocation(Compilation compilation, string outputPath)
         {
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(codeString);
-            return syntaxTree;
+            EmitResult result = compilation.Emit(outputPath);
+
+            if (!result.Success)
+            {
+                foreach (var diagnostic in result.Diagnostics)
+                {
+                    Console.WriteLine(diagnostic);
+                }
+
+                return false;
+            }
+
+            return true;
         }
     }
 }
