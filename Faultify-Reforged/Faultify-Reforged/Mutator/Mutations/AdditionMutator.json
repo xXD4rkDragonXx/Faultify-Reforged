@@ -1,5 +1,5 @@
 {
-  "Name": "Addition Mutator",
+  
   "Description": "Mutates addition operations",
   "Identifier": "\\+",
   "Mutations": [

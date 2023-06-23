@@ -1,4 +1,5 @@
 ﻿using Buildalyzer;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ namespace Faultify_Reforged.Core.ProjectBuilder
         public string TargetDirectory => GetProperty("TargetDir");
 
         public string TargetFileName => GetProperty("TargetFileName");
+
+        public IAnalyzerResult analyzerResult => _analyzerResult;
+
+
 
         private string GetProperty(string name)
         {

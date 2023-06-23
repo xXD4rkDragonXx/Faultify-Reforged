@@ -1,6 +1,8 @@
 ﻿using Faultify_Reforged.Core.Mutator;
 using Faultify_Reforged.Core.ProjectBuilder;
 using Microsoft.CodeAnalysis;
+using Faultify_Reforged.TestRunner;
+using Faultify_Reforged.TestRunner.DotnetTestRunner;
 
 namespace Faultify_Reforged.Core
 {
@@ -22,8 +24,10 @@ namespace Faultify_Reforged.Core
         public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation)
         {
             this.inputProject = inputProject;
-            GenerateProject(testProjectLocation);
-            ProjectLoader projectLoader = new ProjectLoader(inputProject);
+            var analyserResult = GenerateProject(testProjectLocation, inputProject);
+            var testProjects = DuplicateProjects(analyserResult);
+            var projectLoader = new ProjectLoader(inputProject);
+
             if(mutationLocation == null)
             {
                 mutationLocation = $"{Directory.GetCurrentDirectory()}\\Mutator\\Mutations";
@@ -31,19 +35,17 @@ namespace Faultify_Reforged.Core
             List<IMutation> mutations = GetMutations(mutationLocation);
             foreach (var compilation in projectLoader.getSolutionCompilations())
             {
-                if (!TestProjectDetector.IsTestProject(compilation.Value))
+                foreach (Mutation mutation in mutations)
                 {
-                    foreach (Mutation mutation in mutations)
-                    {
-                        var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation);
-                        var x = mutatedCompilation.AssemblyName;
-                        string outputLocation = $"C:\\FaultifyReforgedOutput\\{mutatedCompilation.AssemblyName}.dll";
-                        ASTMutator.compileCodeToLocation(mutatedCompilation, outputLocation);
-                    }
+                    var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation);
+                    var x = mutatedCompilation.AssemblyName;
+                    string testFolder = testProjects.First();
+                    string outputLocation = $"{testFolder}\\{mutatedCompilation.AssemblyName}.dll";
+                    ASTMutator.compileCodeToLocation(mutatedCompilation, outputLocation);
+                    var testRunner = runTestRunner($"{testFolder}\\{Path.GetFileNameWithoutExtension(testProjectLocation)}.dll");
                 }
-            }
 
-            // run testrunner
+            }
 
 
         }
@@ -67,11 +69,25 @@ namespace Faultify_Reforged.Core
             return MutationLoader.LoadMutations(mutationLocation);
         }
 
-        private static void GenerateProject(string projectPath)
+        private static IProjectInfo GenerateProject(string projectPath, string solutionPath)
         {
-            var analyserResult = TestProjectGenerator.GenerateTestProject(projectPath);
+            var analyserResult = TestProjectGenerator.GenerateTestProject(solutionPath, projectPath);
+            return analyserResult;
+        }
+
+        private static List<string> DuplicateProjects(IProjectInfo analyserResult)
+        {
             ProjectDuplicator projectDuplicator = new ProjectDuplicator(Directory.GetParent(analyserResult.AssemblyPath).FullName);
             projectDuplicator.MakeInitialCopies(2);
+            return projectDuplicator.GetProjectFolders();
+        }
+
+        private static ITestRunner runTestRunner(string testAssemblyPath)
+        {
+            ITestRunnerFactory testRunnerFactory = new DotnetTestRunnerFactory();
+            ITestRunner testRunner = testRunnerFactory.CreateTestRunner(testAssemblyPath);
+            testRunner.RunTests().GetAwaiter().GetResult();
+            return testRunner;
         }
     }
 }

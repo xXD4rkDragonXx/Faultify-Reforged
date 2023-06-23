@@ -19,8 +19,16 @@ namespace Faultify_Reforged.Core
                 "Microsoft.VisualStudio.TestPlatform.TestFramework",
                 "NUnit.Framework",
                 "Xunit",
+                "Microsoft.NET.Test.Sdk",
                 // Add other test framework assembly names here when needed
             };
+
+            if (compilation.AssemblyName.EndsWith("Tests"))
+            {
+                return true;
+            }
+
+            Console.WriteLine(compilation.References);
 
             foreach (var reference in compilation.References)
             {

@@ -19,11 +19,12 @@ namespace Faultify_Reforged.TestRunner.DotnetTestRunner
         {
             var dotnetTestAruguments = new DotnetTestArgumentBuilder(testProjectAssemblyPath)
                                             .WithoutLogo()
+                                            .Silent()
                                             .Build();
             var processStartInfo = GetProcessStartInfo(dotnetTestAruguments);
             var process = RunProcess(processStartInfo);
 
-            throw new NotImplementedException("Still need to add tests"); // TODO: Implement
+            return new Task<string>(() => string.Empty); 
         }
 
         private ProcessStartInfo GetProcessStartInfo(string dotnetTestAruguments)
@@ -32,7 +33,7 @@ namespace Faultify_Reforged.TestRunner.DotnetTestRunner
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                UseShellExecute = true,
+                UseShellExecute = false,
                 CreateNoWindow = true,
             };
             return processStartInfo;

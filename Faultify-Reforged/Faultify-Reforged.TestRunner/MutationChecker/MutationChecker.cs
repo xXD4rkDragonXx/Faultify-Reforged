@@ -1,5 +1,4 @@
-﻿using Faultify_Reforged.Core.Mutator;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +9,7 @@ namespace Faultify_Reforged.TestRunner.MutationChecker
 {
     internal class MutationChecker
     {
-        public static Dictionary<string, bool> checkMutations(string testOutput, List<IMutation> mutations)
+        public static Dictionary<string, bool> checkMutations(string testOutput)
         {
             Console.Out.WriteLine(testOutput);
             var x = Regex.Match(testOutput, "failed", RegexOptions.IgnoreCase);

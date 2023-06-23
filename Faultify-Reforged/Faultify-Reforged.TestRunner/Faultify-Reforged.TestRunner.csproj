@@ -8,8 +8,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Faultify-Reforged\Faultify-Reforged.Core.csproj" />
-  </ItemGroup>
-
 </Project>

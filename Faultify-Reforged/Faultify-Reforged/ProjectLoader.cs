@@ -1,4 +1,7 @@
-﻿using Microsoft.Build.Locator;
+﻿using Buildalyzer;
+using Buildalyzer.Workspaces;
+using Faultify_Reforged.Core.ProjectBuilder;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 
@@ -10,6 +13,7 @@ namespace Faultify_Reforged.Core
     internal class ProjectLoader
     {
         readonly string projectPath;
+        readonly string testProjectPath = string.Empty;
         private readonly Dictionary<string, Compilation> solutionCompilations;
 
         public ProjectLoader() {        
@@ -26,6 +30,17 @@ namespace Faultify_Reforged.Core
         }
 
         /// <summary>
+        /// Create an object to hold all the project data
+        /// </summary>
+        /// <param name="projectPath">Location of the .sln file</param>
+        public ProjectLoader(string projectPath, string testProjectPath)
+        {
+            this.projectPath = projectPath;
+            this.testProjectPath = testProjectPath;
+            solutionCompilations = LoadProjectSolution().GetAwaiter().GetResult();
+        }
+
+        /*/// <summary>
         /// Loads all project in the given solution.
         /// </summary>
         /// <returns>The Compiled projects of the solution</returns>
@@ -34,6 +49,9 @@ namespace Faultify_Reforged.Core
             //Register MSBuild location so it can be used. (Otherwise all compilations will be null)
             try
             {
+                if(MSBuildLocator.CanRegister){
+                    MSBuildLocator.RegisterDefaults();
+                }
                 using (var workspace = MSBuildWorkspace.Create())
                 {
                     workspace.LoadMetadataForReferencedProjects = true;
@@ -58,7 +76,27 @@ namespace Faultify_Reforged.Core
                 Console.WriteLine(exception);
                 throw;
             }
+        }*/
+
+        private async Task<Dictionary<string, Compilation>> LoadProjectSolution()
+        {
+            var solutionAnalyzerManager = new AnalyzerManager(projectPath);
+            var solutionWorkspace = solutionAnalyzerManager.GetWorkspace();
+
+            Dictionary<string, Compilation> solutionCompilations = new Dictionary<string, Compilation>();
+
+            foreach (var project in solutionWorkspace.CurrentSolution.Projects)
+            {
+                if (project.Name != Path.GetFileNameWithoutExtension(testProjectPath))
+                {
+                    var compilation = project.GetCompilationAsync().Result;
+                    solutionCompilations.Add(project.Name, compilation);
+                }
+            }
+
+            return solutionCompilations;
         }
+
 
         /// <summary>
         /// Provides the compiled projects

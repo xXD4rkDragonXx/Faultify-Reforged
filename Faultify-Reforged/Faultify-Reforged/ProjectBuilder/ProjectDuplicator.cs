@@ -11,6 +11,7 @@ namespace Faultify_Reforged.Core.ProjectBuilder
     internal class ProjectDuplicator
     {
         private readonly string _testDirectory;
+        private List<string> projectFolders = new List<string>();
 
         public ProjectDuplicator(string testDirectory) 
         {
@@ -65,7 +66,7 @@ namespace Faultify_Reforged.Core.ProjectBuilder
             {
                 var newDirectoryPath = Path.Combine(_testDirectory, $"test-duplication-{i}");
                 CopyDirectoryRecursively(newDirInfo, Directory.CreateDirectory(newDirectoryPath));
-
+                projectFolders.Add(newDirectoryPath);
             });
 
         }
@@ -80,6 +81,11 @@ namespace Faultify_Reforged.Core.ProjectBuilder
             {
                 file.CopyTo(Path.Combine(targetDirectory.FullName, file.Name));
             }
+        }
+
+        public List<string> GetProjectFolders()
+        {
+            return projectFolders;
         }
     }
 }
