@@ -11,9 +11,8 @@ namespace Faultify_Reforged.TestRunner.MutationChecker
     {
         public static Dictionary<string, bool> checkMutations(string testOutput)
         {
-            Console.Out.WriteLine(testOutput);
-            var x = Regex.Match(testOutput, "failed", RegexOptions.IgnoreCase);
-            
+            var testResults = Regex.Matches(testOutput, "(Passed|Failed) (\\w+) \\[(\\d+ ms)\\]", RegexOptions.IgnoreCase);
+
             return null;
         }
     }

@@ -40,44 +40,10 @@ namespace Faultify_Reforged.Core
             solutionCompilations = LoadProjectSolution().GetAwaiter().GetResult();
         }
 
-        /*/// <summary>
-        /// Loads all project in the given solution.
+        /// <summary>
+        /// Loads the SyntaxTrees of the projects in the solution
         /// </summary>
-        /// <returns>The Compiled projects of the solution</returns>
-        private async Task<Dictionary<string, Compilation>> LoadProjectSolution()
-        {
-            //Register MSBuild location so it can be used. (Otherwise all compilations will be null)
-            try
-            {
-                if(MSBuildLocator.CanRegister){
-                    MSBuildLocator.RegisterDefaults();
-                }
-                using (var workspace = MSBuildWorkspace.Create())
-                {
-                    workspace.LoadMetadataForReferencedProjects = true;
-                    var solution = await workspace.OpenSolutionAsync(projectPath);
-                    
-                    Dictionary<string, Compilation> solutionCompilations = new Dictionary<string, Compilation>();
-
-                    foreach (var project in solution.Projects)
-                    {
-                        var compilation = await project.GetCompilationAsync();
-                        if (compilation != null)
-                        {
-                            solutionCompilations.Add(project.Name, compilation);
-                        }
-                    }
-
-                    return solutionCompilations;
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                throw;
-            }
-        }*/
-
+        /// <returns></returns>
         private async Task<Dictionary<string, Compilation>> LoadProjectSolution()
         {
             var solutionAnalyzerManager = new AnalyzerManager(projectPath);

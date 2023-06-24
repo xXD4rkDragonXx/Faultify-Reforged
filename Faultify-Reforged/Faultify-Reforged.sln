@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faultify-Reforged.Core", "Faultify-Reforged\Faultify-Reforged.Core.csproj", "{135BCF6E-D105-40E6-9669-714F18F9231C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Faultify-Reforged.Core", "Faultify-Reforged\Faultify-Reforged.Core.csproj", "{135BCF6E-D105-40E6-9669-714F18F9231C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faultify-Reforged.CLI", "Faultify-Reforged.CLI\Faultify-Reforged.CLI.csproj", "{C086F347-1B24-4BBD-9E01-9C04977BD214}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Faultify-Reforged.CLI", "Faultify-Reforged.CLI\Faultify-Reforged.CLI.csproj", "{C086F347-1B24-4BBD-9E01-9C04977BD214}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faultify-Reforged.TestRunner", "Faultify-Reforged.TestRunner\Faultify-Reforged.TestRunner.csproj", "{BDF9ABD4-A009-43CC-9AB2-C7B13A0E1061}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Faultify-Reforged.TestRunner", "Faultify-Reforged.TestRunner\Faultify-Reforged.TestRunner.csproj", "{BDF9ABD4-A009-43CC-9AB2-C7B13A0E1061}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faultify-Reforged.Reporter", "Faultify-Reforged.Reporter\Faultify-Reforged.Reporter.csproj", "{EB78EC99-A29C-48E3-AA91-EEAE088C7ACA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{BDF9ABD4-A009-43CC-9AB2-C7B13A0E1061}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDF9ABD4-A009-43CC-9AB2-C7B13A0E1061}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDF9ABD4-A009-43CC-9AB2-C7B13A0E1061}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB78EC99-A29C-48E3-AA91-EEAE088C7ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB78EC99-A29C-48E3-AA91-EEAE088C7ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB78EC99-A29C-48E3-AA91-EEAE088C7ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB78EC99-A29C-48E3-AA91-EEAE088C7ACA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

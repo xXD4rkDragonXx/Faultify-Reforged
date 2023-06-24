@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Faultify-Reforged.Reporter\Faultify-Reforged.Reporter.csproj" />
     <ProjectReference Include="..\Faultify-Reforged.TestRunner\Faultify-Reforged.TestRunner.csproj" />
   </ItemGroup>
 

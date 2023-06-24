@@ -2,6 +2,8 @@
 {
     public interface ITestRunner
     {
-        public Task<string> RunTests(); // Change string To result object
+        public string RunTests(); // Change string To result object
+
+        public string getOutput();
     }
 }

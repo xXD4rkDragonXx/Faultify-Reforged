@@ -15,7 +15,7 @@ namespace Faultify_Reforged.TestRunner.DotnetTestRunner
             Error = string.Empty;
         }
 
-        public Task<string> RunTests()
+        public string RunTests()
         {
             var dotnetTestAruguments = new DotnetTestArgumentBuilder(testProjectAssemblyPath)
                                             .WithoutLogo()
@@ -24,7 +24,7 @@ namespace Faultify_Reforged.TestRunner.DotnetTestRunner
             var processStartInfo = GetProcessStartInfo(dotnetTestAruguments);
             var process = RunProcess(processStartInfo);
 
-            return new Task<string>(() => string.Empty); 
+            return Output; 
         }
 
         private ProcessStartInfo GetProcessStartInfo(string dotnetTestAruguments)
@@ -64,6 +64,11 @@ namespace Faultify_Reforged.TestRunner.DotnetTestRunner
             process.WaitForExit();
 
             return process;
+        }
+
+        public string getOutput()
+        {
+            return Output;
         }
     }
 }
