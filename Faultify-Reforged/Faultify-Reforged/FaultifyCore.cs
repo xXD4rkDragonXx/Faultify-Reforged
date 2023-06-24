@@ -3,6 +3,7 @@ using Faultify_Reforged.Core.ProjectBuilder;
 using Faultify_Reforged.TestRunner;
 using Faultify_Reforged.TestRunner.DotnetTestRunner;
 using Faultify_Reforged.Reporter;
+using Microsoft.CodeAnalysis;
 
 namespace Faultify_Reforged.Core
 {
@@ -37,18 +38,19 @@ namespace Faultify_Reforged.Core
             List<IMutation> mutations = GetMutations(mutationLocation);
             foreach (var compilation in projectLoader.getSolutionCompilations())
             {
-                if (TestProjectDetector.IsTestProject(compilation.Value))
+                if (!TestProjectDetector.IsTestProject(compilation.Value))
                 {
                     foreach (Mutation mutation in mutations)
                     {
-                        var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation);
+                        var mutationReporter = new MutationReporter(mutation);
+                        var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation, mutationReporter);
                         var x = mutatedCompilation.AssemblyName;
                         string testFolder = testProjects.First();
                         string outputLocation = $"{testFolder}\\{mutatedCompilation.AssemblyName}.dll";
                         ASTMutator.compileCodeToLocation(mutatedCompilation, outputLocation);
                         var testRunner = RunTestRunner($"{testFolder}\\{Path.GetFileNameWithoutExtension(testProjectLocation)}.dll");
                         outputs.Add(testRunner.getOutput());
-                        ReportResult(reporter, testRunner.getOutput(), mutation, mutatedCompilation.ToString(), compilation.Value.ToString());
+                        ReportResult(reporter, testRunner.getOutput(), mutationReporter);
                     }
                 }
             }
@@ -103,12 +105,12 @@ namespace Faultify_Reforged.Core
         /// <param name="mutation"></param>
         /// <param name="mutatedCode"></param>
         /// <param name="originalCode"></param>
-        private static void ReportResult(ReportBuilder reportBuilder, string testResult, Mutation mutation, string mutatedCode, string originalCode)
+        private static void ReportResult(ReportBuilder reportBuilder, string testResult, MutationReporter mutationReporter)
         {
 
             string testOutcome = "Survived";
 
-            reportBuilder.AddTestResult(mutation.Name, testOutcome, mutatedCode, originalCode);
+            reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, testOutcome, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode());
         }
     }
 }

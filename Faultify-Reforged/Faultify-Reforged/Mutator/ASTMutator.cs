@@ -8,14 +8,14 @@ namespace Faultify_Reforged.Core.Mutator
     internal class ASTMutator
     {
 
-        public static Compilation Mutate(Compilation compilation, Mutation mutation)
+        public static Compilation Mutate(Compilation compilation, Mutation mutation, MutationReporter mutationReporter)
         {
             Compilation newCompilation = compilation;
             foreach (SyntaxTree syntaxTree in compilation.SyntaxTrees)
             {
                 SyntaxNode rootNode = syntaxTree.GetRoot();
                 
-                RegexSyntaxRewriter regexSyntaxRewriter = new RegexSyntaxRewriter(mutation.Identifier, mutation.Mutations[0]);
+                RegexSyntaxRewriter regexSyntaxRewriter = new RegexSyntaxRewriter(mutation.Identifier, mutation.Mutations[0], mutationReporter);
                 SyntaxNode newRootNode = regexSyntaxRewriter.Visit(rootNode);
 
                 SyntaxTree newSyntaxTree = syntaxTree.WithRootAndOptions(newRootNode, syntaxTree.Options);

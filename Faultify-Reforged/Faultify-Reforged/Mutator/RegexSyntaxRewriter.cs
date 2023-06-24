@@ -10,16 +10,27 @@ namespace Faultify_Reforged.Core.Mutator
 
         string findPattern;
         string replacementString;
+        MutationReporter reporter;
 
         public RegexSyntaxRewriter(string findPattern, string replacementString) 
         {
             this.findPattern = findPattern;
             this.replacementString = replacementString;
+            this.reporter = new MutationReporter(new Mutation());
+        }
+
+        public RegexSyntaxRewriter(string findPattern, string replacementString, MutationReporter mutationReporter) 
+        {
+            this.findPattern = findPattern;
+            this.replacementString = replacementString;
+            this.reporter = mutationReporter;
         }
 
         public override SyntaxNode? VisitExpressionStatement(ExpressionStatementSyntax node)
         {
             string modifiedTreeString = node.ToString();
+
+            reporter.AddOriginalCode(modifiedTreeString); //Not modified yet
 
             MatchCollection regexMatches = Regex.Matches(modifiedTreeString, findPattern);
             
@@ -28,6 +39,8 @@ namespace Faultify_Reforged.Core.Mutator
                 modifiedTreeString = modifiedTreeString.Remove(regexMatch.Index, regexMatch.Length);
                 modifiedTreeString = modifiedTreeString.Insert(regexMatch.Index, replacementString);
             }
+
+            reporter.AddMutatedCode(modifiedTreeString);
 
             SyntaxNode modfiedNode = SyntaxFactory.ParseStatement(modifiedTreeString);
 
