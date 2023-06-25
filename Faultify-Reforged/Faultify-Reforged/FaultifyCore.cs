@@ -107,8 +107,9 @@ namespace Faultify_Reforged.Core
         /// <param name="originalCode"></param>
         private static void ReportResult(ReportBuilder reportBuilder, string testResult, MutationReporter mutationReporter)
         {
+            var parsedResults = TestResultParser.ParseResults(testResult);
 
-            string testOutcome = "Survived";
+            string testOutcome = parsedResults.First().Groups[1].Value;
 
             reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, testOutcome, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode());
         }
