@@ -8,6 +8,8 @@
         private string? fileName;
         private bool hasMutated;
         private string? mutatedFileName;
+        private string? originalCodeMutated;
+        private string? mutatedCodeMutated;
 
         public MutationReporter(Mutation mutation)
         {
@@ -34,16 +36,18 @@
         {
             this.hasMutated = true;
             this.mutatedFileName = fileName; //Quick and dirty to set correct filename
+            this.originalCodeMutated = originalCode;
+            this.mutatedCodeMutated = mutatedCode;
         }
 
         public string? GetOriginalCode()
         {
-            return originalCode;
+            return originalCodeMutated;
         }
 
         public string? GetMutatedCode()
         {
-            return mutatedCode;
+            return mutatedCodeMutated;
         }
 
         public Mutation GetMutation()

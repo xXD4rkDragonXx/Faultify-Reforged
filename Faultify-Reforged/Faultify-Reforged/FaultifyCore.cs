@@ -59,7 +59,6 @@ namespace Faultify_Reforged.Core
                     {
                         var mutationReporter = new MutationReporter(mutation);
                         var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation, mutationReporter);
-                        var x = mutatedCompilation.AssemblyName;
                         string testFolder = testProjects.First();
                         string mutationOutputLocation = $"{testFolder}\\{mutatedCompilation.AssemblyName}.dll";
                         ASTMutator.compileCodeToLocation(mutatedCompilation, mutationOutputLocation);
