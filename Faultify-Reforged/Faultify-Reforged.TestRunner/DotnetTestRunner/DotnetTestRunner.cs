@@ -24,7 +24,7 @@ namespace Faultify_Reforged.TestRunner.DotnetTestRunner
             var processStartInfo = GetProcessStartInfo(dotnetTestAruguments);
             var process = RunProcess(processStartInfo);
 
-            return Output; 
+            return Output;
         }
 
         private ProcessStartInfo GetProcessStartInfo(string dotnetTestAruguments)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace Faultify_Reforged.Core.ProjectBuilder
 {
@@ -13,7 +7,7 @@ namespace Faultify_Reforged.Core.ProjectBuilder
         private readonly string _testDirectory;
         private List<string> projectFolders = new List<string>();
 
-        public ProjectDuplicator(string testDirectory) 
+        public ProjectDuplicator(string testDirectory)
         {
             _testDirectory = testDirectory;
         }

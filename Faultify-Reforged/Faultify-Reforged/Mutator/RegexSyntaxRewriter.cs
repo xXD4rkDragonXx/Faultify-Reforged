@@ -12,14 +12,14 @@ namespace Faultify_Reforged.Core.Mutator
         string replacementString;
         MutationReporter reporter;
 
-        public RegexSyntaxRewriter(string findPattern, string replacementString) 
+        public RegexSyntaxRewriter(string findPattern, string replacementString)
         {
             this.findPattern = findPattern;
             this.replacementString = replacementString;
             this.reporter = new MutationReporter(new Mutation());
         }
 
-        public RegexSyntaxRewriter(string findPattern, string replacementString, MutationReporter mutationReporter) 
+        public RegexSyntaxRewriter(string findPattern, string replacementString, MutationReporter mutationReporter)
         {
             this.findPattern = findPattern;
             this.replacementString = replacementString;
@@ -33,7 +33,7 @@ namespace Faultify_Reforged.Core.Mutator
             reporter.AddOriginalCode(modifiedTreeString); //Not modified yet
 
             MatchCollection regexMatches = Regex.Matches(modifiedTreeString, findPattern);
-            
+
             foreach (Match regexMatch in regexMatches)
             {
                 modifiedTreeString = modifiedTreeString.Remove(regexMatch.Index, regexMatch.Length);
@@ -53,12 +53,12 @@ namespace Faultify_Reforged.Core.Mutator
             this.findPattern = findPattern;
         }
 
-        public void SetReplacementString (string replacementString)
+        public void SetReplacementString(string replacementString)
         {
             this.replacementString = replacementString;
         }
 
-        public void SetValues (string findPattern, string replacementString)
+        public void SetValues(string findPattern, string replacementString)
         {
             this.findPattern = findPattern;
             this.replacementString = replacementString;

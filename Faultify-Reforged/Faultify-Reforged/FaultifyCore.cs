@@ -1,8 +1,8 @@
 ﻿using Faultify_Reforged.Core.Mutator;
 using Faultify_Reforged.Core.ProjectBuilder;
+using Faultify_Reforged.Reporter;
 using Faultify_Reforged.TestRunner;
 using Faultify_Reforged.TestRunner.DotnetTestRunner;
-using Faultify_Reforged.Reporter;
 using Microsoft.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -25,7 +25,7 @@ namespace Faultify_Reforged.Core
         /// <param name="mutationLocation">The Folder containting the mutation files</param>
         public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation) : this(inputProject, testProjectLocation, mutationLocation, $"{Path.GetDirectoryName(inputProject)}\\") //Constructor overloading reference Calls the constructor with a default value
         {
-            
+
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Faultify_Reforged.Core
 
         private static (string, bool) IsMutationKilled(MatchCollection originalTestResult, MatchCollection mutationTestResults)
         {
-            for(int i = 0; i < originalTestResult.Count(); i++)
+            for (int i = 0; i < originalTestResult.Count(); i++)
             {
                 var match = originalTestResult[i];
                 var mutationMatch = mutationTestResults[i];

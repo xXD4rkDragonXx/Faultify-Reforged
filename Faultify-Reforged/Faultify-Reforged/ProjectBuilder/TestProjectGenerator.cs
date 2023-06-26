@@ -1,14 +1,5 @@
 ﻿using Buildalyzer;
 using Buildalyzer.Environment;
-using Buildalyzer.Workspaces;
-using Microsoft.Build.Construction;
-using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Faultify_Reforged.Core.ProjectBuilder
 {

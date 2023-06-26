@@ -20,6 +20,6 @@ namespace Faultify_Reforged.CLI
         public string MutationLocation { get; set; }
 
         [Option('r', "runners", Required = false, HelpText = "Amount of testrunners")]
-        public int RunnerAmount { get; set;}
+        public int RunnerAmount { get; set; }
     }
 }

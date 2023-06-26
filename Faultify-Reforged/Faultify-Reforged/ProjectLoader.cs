@@ -1,9 +1,6 @@
 ﻿using Buildalyzer;
 using Buildalyzer.Workspaces;
-using Faultify_Reforged.Core.ProjectBuilder;
-using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.MSBuild;
 
 namespace Faultify_Reforged.Core
 {
@@ -16,15 +13,17 @@ namespace Faultify_Reforged.Core
         readonly string testProjectPath = string.Empty;
         private readonly Dictionary<string, Compilation> solutionCompilations;
 
-        public ProjectLoader() {        
+        public ProjectLoader()
+        {
             solutionCompilations = LoadProjectSolution().GetAwaiter().GetResult();
         }
-        
+
         /// <summary>
         /// Create an object to hold all the project data
         /// </summary>
         /// <param name="projectPath">Location of the .sln file</param>
-        public ProjectLoader(string projectPath) { 
+        public ProjectLoader(string projectPath)
+        {
             this.projectPath = projectPath;
             solutionCompilations = LoadProjectSolution().GetAwaiter().GetResult();
         }
@@ -68,8 +67,9 @@ namespace Faultify_Reforged.Core
         /// Provides the compiled projects
         /// </summary>
         /// <returns>Compiled projects</returns>
-        public Dictionary<string, Compilation> getSolutionCompilations() { 
-            return solutionCompilations; 
+        public Dictionary<string, Compilation> getSolutionCompilations()
+        {
+            return solutionCompilations;
         }
     }
 }

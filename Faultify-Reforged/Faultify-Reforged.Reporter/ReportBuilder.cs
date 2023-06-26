@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Faultify_Reforged.Reporter
 {
     public class ReportBuilder
     {
-        private StringBuilder ReportData = new StringBuilder(); 
-        public ReportBuilder() 
+        private StringBuilder ReportData = new StringBuilder();
+        public ReportBuilder()
         {
             AddBoilerPlateTop();
         }
@@ -17,7 +13,7 @@ namespace Faultify_Reforged.Reporter
         public void AddTestResult(string MutationName, string TestResult, string OriginalCode, string MutatedCode, string TestName, string FileName)
         {
             string htmlID = MutationName + TestResult + OriginalCode + MutatedCode;
-            string testResult = 
+            string testResult =
                 $"<div class=\"accordion-item\">" +
                 $"<h2 class=\"accordion-header {TestResult}\" id=heading{htmlID}>" +
                 $"<button class=\"accordion-button\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapse{htmlID}\" aria-expanded=\"true\" aria-controls=\"collapse{htmlID}\">" +

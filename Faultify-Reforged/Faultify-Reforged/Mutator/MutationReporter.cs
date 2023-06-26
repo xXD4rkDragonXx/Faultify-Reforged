@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Faultify_Reforged.Core.Mutator
+﻿namespace Faultify_Reforged.Core.Mutator
 {
     internal class MutationReporter
     {
@@ -15,8 +9,8 @@ namespace Faultify_Reforged.Core.Mutator
         private bool hasMutated;
         private string? mutatedFileName;
 
-        public MutationReporter(Mutation mutation) 
-        { 
+        public MutationReporter(Mutation mutation)
+        {
             this.mutation = mutation;
             this.hasMutated = false;
         }
@@ -35,7 +29,7 @@ namespace Faultify_Reforged.Core.Mutator
         {
             this.fileName = fileName;
         }
-        
+
         public void setMutated()
         {
             this.hasMutated = true;
@@ -55,7 +49,7 @@ namespace Faultify_Reforged.Core.Mutator
         public Mutation GetMutation()
         {
             return mutation;
-        } 
+        }
 
         public string? GetFileName()
         {

@@ -39,7 +39,7 @@
             var currentColor = Console.ForegroundColor;
             Console.ForegroundColor = consoleColor;
             Console.WriteLine(message);
-            if(!keepColor)
+            if (!keepColor)
             {
                 Console.ForegroundColor = currentColor;
             }
