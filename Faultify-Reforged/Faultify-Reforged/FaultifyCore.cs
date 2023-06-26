@@ -43,14 +43,18 @@ namespace Faultify_Reforged.Core
             var projectLoader = new ProjectLoader(inputProject);
             var outputs = new List<string>();
             var reporter = new ReportBuilder();
+            Console.WriteLine("Running original tests");
             var originalTestRunner = RunTestRunner(testProjectLocation);
             var originalTestResults = TestResultParser.ParseResults(originalTestRunner.getOutput());
+            Console.WriteLine("Test Run compelete");
 
             if (mutationLocation == null)
             {
                 mutationLocation = $"{Directory.GetCurrentDirectory()}\\Mutator\\Mutations";
             }
+            Console.WriteLine($"Loading mutations located at {mutationLocation}");
             List<IMutation> mutations = GetMutations(mutationLocation);
+            Console.WriteLine($"{mutations.Count} Mutations loaded");
             foreach (var compilation in projectLoader.getSolutionCompilations())
             {
                 if (!TestProjectDetector.IsTestProject(compilation.Value))
@@ -59,12 +63,17 @@ namespace Faultify_Reforged.Core
                     {
                         var mutationReporter = new MutationReporter(mutation);
                         var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation, mutationReporter);
-                        string testFolder = testProjects.First();
-                        string mutationOutputLocation = $"{testFolder}\\{mutatedCompilation.AssemblyName}.dll";
-                        ASTMutator.compileCodeToLocation(mutatedCompilation, mutationOutputLocation);
-                        var testRunner = RunTestRunner($"{testFolder}\\{Path.GetFileNameWithoutExtension(testProjectLocation)}.dll");
-                        outputs.Add(testRunner.getOutput());
-                        ReportResult(reporter, testRunner.getOutput(), mutationReporter, originalTestResults);
+                        if (mutationReporter.HasMutated())
+                        {
+                            Console.WriteLine($"Compiling {mutatedCompilation.AssemblyName}.dll");
+                            string testFolder = testProjects.First();
+                            string mutationOutputLocation = $"{testFolder}\\{mutatedCompilation.AssemblyName}.dll";
+                            ASTMutator.compileCodeToLocation(mutatedCompilation, mutationOutputLocation);
+                            Console.WriteLine("Running tests");
+                            var testRunner = RunTestRunner($"{testFolder}\\{Path.GetFileNameWithoutExtension(testProjectLocation)}.dll");
+                            outputs.Add(testRunner.getOutput());
+                            ReportResult(reporter, testRunner.getOutput(), mutationReporter, originalTestResults);
+                        }
                     }
                 }
             }
@@ -84,11 +93,13 @@ namespace Faultify_Reforged.Core
         /// <summary>
         /// Build the projectPath project
         /// </summary>
-        /// <param name="projectPath">Path to the prioject</param>
+        /// <param name="projectPath">Path to the project</param>
         /// <returns></returns>
         private static IProjectInfo GenerateProject(string projectPath)
         {
+            Console.WriteLine(@"Started building the test project");
             var analyserResult = TestProjectGenerator.GenerateTestProject(projectPath);
+            Console.WriteLine(@"Finished building the test project");
             return analyserResult;
         }
 
@@ -99,8 +110,10 @@ namespace Faultify_Reforged.Core
         /// <returns></returns>
         private static List<string> DuplicateProjects(IProjectInfo analyserResult)
         {
+            Console.WriteLine("Started project duplication");
             ProjectDuplicator projectDuplicator = new ProjectDuplicator(Directory.GetParent(analyserResult.AssemblyPath).FullName);
             projectDuplicator.MakeInitialCopies(2);
+            Console.WriteLine("Finished project duplication");
             return projectDuplicator.GetProjectFolders();
         }
 
@@ -125,10 +138,8 @@ namespace Faultify_Reforged.Core
         /// <param name="mutationReporter">Reporter to pass on report data</param>
         private static void ReportResult(ReportBuilder reportBuilder, string testResult, MutationReporter mutationReporter, MatchCollection originalTestResult)
         {
-            if (!mutationReporter.HasMutated())
-            {
-                return;
-            }
+            Console.WriteLine("Reporting result");
+
             var parsedResults = TestResultParser.ParseResults(testResult);
 
             var (testName, killed) = IsMutationKilled(originalTestResult, parsedResults);

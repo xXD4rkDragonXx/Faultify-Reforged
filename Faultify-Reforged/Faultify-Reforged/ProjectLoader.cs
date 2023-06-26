@@ -24,6 +24,7 @@ namespace Faultify_Reforged.Core
         /// <param name="projectPath">Location of the .sln file</param>
         public ProjectLoader(string projectPath)
         {
+            Console.WriteLine("Building Syntax Trees");
             this.projectPath = projectPath;
             solutionCompilations = LoadProjectSolution().GetAwaiter().GetResult();
         }

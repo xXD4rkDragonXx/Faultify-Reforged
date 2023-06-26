@@ -9,6 +9,7 @@ namespace Faultify_Reforged.Core.Mutator
 
         public static Compilation Mutate(Compilation compilation, Mutation mutation, MutationReporter mutationReporter)
         {
+            Console.WriteLine("Trying to mutate");
             Compilation newCompilation = compilation;
             foreach (SyntaxTree syntaxTree in compilation.SyntaxTrees)
             {
