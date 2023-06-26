@@ -6,7 +6,7 @@ namespace Faultify_Reforged.TestRunner
     {
         public static MatchCollection ParseResults(string testResults)
         {
-            MatchCollection parsedResults = Regex.Matches(testResults, "(Passed|Failed) (\\w+) \\[(\\d+ ms)\\]", RegexOptions.IgnoreCase);
+            MatchCollection parsedResults = Regex.Matches(testResults, "(Passed|Failed) (\\w+(?:\\w+\\s?)*)\\s?\\[<?\\s?(\\d+ ms)\\]", RegexOptions.IgnoreCase);
             return parsedResults;
         }
     }

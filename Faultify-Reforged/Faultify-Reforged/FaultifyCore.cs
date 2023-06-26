@@ -129,9 +129,11 @@ namespace Faultify_Reforged.Core
             var parsedResults = TestResultParser.ParseResults(testResult);
 
             var x = IsMutationKilled(originalTestResult, parsedResults);
+
+            var result = x ? "Killed" : "Survived";
             string testOutcome = parsedResults.First().Groups[1].Value;
 
-            reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, testOutcome, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode());
+            reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, result, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode());
         }
 
         private static bool IsMutationKilled(MatchCollection originalTestResult, MatchCollection mutationTestResults)
@@ -141,7 +143,7 @@ namespace Faultify_Reforged.Core
                 var match = originalTestResult[i];
                 var mutationMatch = mutationTestResults[i];
 
-                if (match.Groups[0].Value == mutationMatch.Groups[0].Value)
+                if (match.Groups[1].Value != mutationMatch.Groups[1].Value)
                 {
                     return true;
                 }
