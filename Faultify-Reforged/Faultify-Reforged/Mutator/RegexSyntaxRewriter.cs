@@ -38,6 +38,7 @@ namespace Faultify_Reforged.Core.Mutator
             {
                 modifiedTreeString = modifiedTreeString.Remove(regexMatch.Index, regexMatch.Length);
                 modifiedTreeString = modifiedTreeString.Insert(regexMatch.Index, replacementString);
+                reporter.setMutated();
             }
 
             reporter.AddMutatedCode(modifiedTreeString);

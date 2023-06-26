@@ -14,6 +14,8 @@ namespace Faultify_Reforged.Core.Mutator
             foreach (SyntaxTree syntaxTree in compilation.SyntaxTrees)
             {
                 SyntaxNode rootNode = syntaxTree.GetRoot();
+
+                mutationReporter.AddFileName(Path.Combine(Path.GetDirectoryName(syntaxTree.FilePath).Split(@"\").Last(), Path.GetFileName(syntaxTree.FilePath)));
                 
                 RegexSyntaxRewriter regexSyntaxRewriter = new RegexSyntaxRewriter(mutation.Identifier, mutation.Mutations[0], mutationReporter);
                 SyntaxNode newRootNode = regexSyntaxRewriter.Visit(rootNode);

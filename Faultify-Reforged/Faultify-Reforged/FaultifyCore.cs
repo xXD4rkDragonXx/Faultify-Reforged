@@ -126,16 +126,20 @@ namespace Faultify_Reforged.Core
         /// <param name="mutationReporter">Reporter to pass on report data</param>
         private static void ReportResult(ReportBuilder reportBuilder, string testResult, MutationReporter mutationReporter, MatchCollection originalTestResult)
         {
+            if (!mutationReporter.HasMutated())
+            {
+                return;
+            }
             var parsedResults = TestResultParser.ParseResults(testResult);
 
-            var x = IsMutationKilled(originalTestResult, parsedResults);
+            var (testName, killed) = IsMutationKilled(originalTestResult, parsedResults);
 
-            var result = x ? "Killed" : "Survived";
+            var result = killed ? "Killed" : "Survived";
 
-            reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, result, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode());
+            reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, result, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode(), testName, mutationReporter.GetFileName());
         }
 
-        private static bool IsMutationKilled(MatchCollection originalTestResult, MatchCollection mutationTestResults)
+        private static (string, bool) IsMutationKilled(MatchCollection originalTestResult, MatchCollection mutationTestResults)
         {
             for(int i = 0; i < originalTestResult.Count(); i++)
             {
@@ -144,10 +148,10 @@ namespace Faultify_Reforged.Core
 
                 if (match.Groups[1].Value != mutationMatch.Groups[1].Value)
                 {
-                    return true;
+                    return (match.Groups[2].Value, true);
                 }
             }
-            return false;
+            return (null, false);
         }
     }
 }

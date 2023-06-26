@@ -11,10 +11,14 @@ namespace Faultify_Reforged.Core.Mutator
         private readonly Mutation mutation;
         private string? originalCode;
         private string? mutatedCode;
+        private string? fileName;
+        private bool hasMutated;
+        private string? mutatedFileName;
 
         public MutationReporter(Mutation mutation) 
         { 
             this.mutation = mutation;
+            this.hasMutated = false;
         }
 
         public void AddOriginalCode(string originalCode)
@@ -25,6 +29,17 @@ namespace Faultify_Reforged.Core.Mutator
         public void AddMutatedCode(string mutatedCode)
         {
             this.mutatedCode = mutatedCode;
+        }
+
+        public void AddFileName(string fileName)
+        {
+            this.fileName = fileName;
+        }
+        
+        public void setMutated()
+        {
+            this.hasMutated = true;
+            this.mutatedFileName = fileName; //Quick and dirty to set correct filename
         }
 
         public string? GetOriginalCode()
@@ -41,6 +56,16 @@ namespace Faultify_Reforged.Core.Mutator
         {
             return mutation;
         } 
+
+        public string? GetFileName()
+        {
+            return mutatedFileName;
+        }
+
+        public bool HasMutated()
+        {
+            return hasMutated;
+        }
 
     }
 }
