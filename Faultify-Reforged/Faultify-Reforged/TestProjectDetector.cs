@@ -28,8 +28,6 @@ namespace Faultify_Reforged.Core
                 return true;
             }
 
-            Console.WriteLine(compilation.References);
-
             foreach (var reference in compilation.References)
             {
                 if (testFrameworks.Any(testFramework => reference.Display.EndsWith(testFramework, StringComparison.OrdinalIgnoreCase)))

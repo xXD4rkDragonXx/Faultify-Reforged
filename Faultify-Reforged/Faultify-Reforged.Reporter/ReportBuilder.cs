@@ -65,6 +65,7 @@ namespace Faultify_Reforged.Reporter
         {
             AddBoilerPlateBottom();
             File.WriteAllText(Path.Combine(outputLocation, "FaultifyReport.html"), ReportData.ToString());
+            Console.WriteLine($"Report has been published at: {Path.Combine(outputLocation, "FaultifyReport.html")}");
         }
 
     }

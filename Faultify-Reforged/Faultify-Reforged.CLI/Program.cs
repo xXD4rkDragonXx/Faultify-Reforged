@@ -41,7 +41,14 @@ namespace Faultify_Reforged.CLI
         static void RunOptions(Options options)
         {
             ConsoleMessages.printOptions(options);
-            FaultifyCore faultify_Reforged = new FaultifyCore(options.InputProject, options.InputProjectTestLocation, options.MutationLocation);
+            if(options.OutputLocation != null)
+            {
+                FaultifyCore faultify_Reforged = new FaultifyCore(options.InputProject, options.InputProjectTestLocation, options.MutationLocation, options.OutputLocation);
+            }
+            else
+            {
+                FaultifyCore faultify_Reforged = new FaultifyCore(options.InputProject, options.InputProjectTestLocation, options.MutationLocation);
+            }
         }
     }
 }

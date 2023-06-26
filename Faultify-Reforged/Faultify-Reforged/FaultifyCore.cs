@@ -131,7 +131,6 @@ namespace Faultify_Reforged.Core
             var x = IsMutationKilled(originalTestResult, parsedResults);
 
             var result = x ? "Killed" : "Survived";
-            string testOutcome = parsedResults.First().Groups[1].Value;
 
             reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, result, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode());
         }
