@@ -4,6 +4,7 @@ using Faultify_Reforged.TestRunner;
 using Faultify_Reforged.TestRunner.DotnetTestRunner;
 using Faultify_Reforged.Reporter;
 using Microsoft.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 namespace Faultify_Reforged.Core
 {
@@ -22,16 +23,30 @@ namespace Faultify_Reforged.Core
         /// <param name="inputProject">The sln file location</param>
         /// <param name="testProjectLocation">The test project file location</param>
         /// <param name="mutationLocation">The Folder containting the mutation files</param>
-        public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation)
+        public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation) : this(inputProject, testProjectLocation, mutationLocation, $"{Path.GetDirectoryName(inputProject)}\\") //Constructor overloading reference Calls the constructor with a default value
+        {
+            
+        }
+
+        /// <summary>
+        /// Creates an instance of the core with an output location.
+        /// </summary>
+        /// <param name="inputProject">The sln file location</param>
+        /// <param name="testProjectLocation">The test project file location</param>
+        /// <param name="mutationLocation">The Folder containting the mutation files</param>
+        /// <param name="outputLocation">Location to put the output</param>
+        public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation, string outputLocation)
         {
             this.inputProject = inputProject;
-            var analyserResult = GenerateProject(testProjectLocation, inputProject);
+            var analyserResult = GenerateProject(testProjectLocation);
             var testProjects = DuplicateProjects(analyserResult);
             var projectLoader = new ProjectLoader(inputProject);
             var outputs = new List<string>();
             var reporter = new ReportBuilder();
+            var originalTestRunner = RunTestRunner(testProjectLocation);
+            var originalTestResults = TestResultParser.ParseResults(originalTestRunner.getOutput());
 
-            if(mutationLocation == null)
+            if (mutationLocation == null)
             {
                 mutationLocation = $"{Directory.GetCurrentDirectory()}\\Mutator\\Mutations";
             }
@@ -46,42 +61,43 @@ namespace Faultify_Reforged.Core
                         var mutatedCompilation = ASTMutator.Mutate(compilation.Value, mutation, mutationReporter);
                         var x = mutatedCompilation.AssemblyName;
                         string testFolder = testProjects.First();
-                        string outputLocation = $"{testFolder}\\{mutatedCompilation.AssemblyName}.dll";
-                        ASTMutator.compileCodeToLocation(mutatedCompilation, outputLocation);
+                        string mutationOutputLocation = $"{testFolder}\\{mutatedCompilation.AssemblyName}.dll";
+                        ASTMutator.compileCodeToLocation(mutatedCompilation, mutationOutputLocation);
                         var testRunner = RunTestRunner($"{testFolder}\\{Path.GetFileNameWithoutExtension(testProjectLocation)}.dll");
                         outputs.Add(testRunner.getOutput());
-                        ReportResult(reporter, testRunner.getOutput(), mutationReporter);
+                        ReportResult(reporter, testRunner.getOutput(), mutationReporter, originalTestResults);
                     }
                 }
             }
-            reporter.BuildReport("C:\\FaultifyReforgedOutput");
+            reporter.BuildReport(outputLocation);
         }
 
         /// <summary>
-        /// Creates an instance of the core with an output location.
+        /// Loads the mutations from the given mutationLocation
         /// </summary>
-        /// <param name="inputProject">The sln file location</param>
-        /// <param name="testProjectLocation">The test project file location</param>
-        /// <param name="mutationLocation">The Folder containting the mutation files</param>
-        /// <param name="outputLocation">Location to put the output</param>
-        public FaultifyCore(string inputProject, string testProjectLocation, string mutationLocation, string outputLocation)
-        {
-            this.inputProject = inputProject;
-            this.outputProject = outputLocation;
-            this.mutationLocation = mutationLocation;
-        }
-
+        /// <param name="mutationLocation"></param>
+        /// <returns></returns>
         public static List<IMutation> GetMutations(string mutationLocation)
         {
             return MutationLoader.LoadMutations(mutationLocation);
         }
 
-        private static IProjectInfo GenerateProject(string projectPath, string solutionPath)
+        /// <summary>
+        /// Build the projectPath project
+        /// </summary>
+        /// <param name="projectPath">Path to the prioject</param>
+        /// <returns></returns>
+        private static IProjectInfo GenerateProject(string projectPath)
         {
-            var analyserResult = TestProjectGenerator.GenerateTestProject(solutionPath, projectPath);
+            var analyserResult = TestProjectGenerator.GenerateTestProject(projectPath);
             return analyserResult;
         }
 
+        /// <summary>
+        /// Duplicates a build project over multiple folders
+        /// </summary>
+        /// <param name="analyserResult">project to duplicate</param>
+        /// <returns></returns>
         private static List<string> DuplicateProjects(IProjectInfo analyserResult)
         {
             ProjectDuplicator projectDuplicator = new ProjectDuplicator(Directory.GetParent(analyserResult.AssemblyPath).FullName);
@@ -89,6 +105,11 @@ namespace Faultify_Reforged.Core
             return projectDuplicator.GetProjectFolders();
         }
 
+        /// <summary>
+        /// Runs the test runner
+        /// </summary>
+        /// <param name="testAssemblyPath">Path to the test assembly</param>
+        /// <returns></returns>
         private static ITestRunner RunTestRunner(string testAssemblyPath)
         {
             ITestRunnerFactory testRunnerFactory = new DotnetTestRunnerFactory();
@@ -102,16 +123,30 @@ namespace Faultify_Reforged.Core
         /// </summary>
         /// <param name="reportBuilder">Report builder to add report to</param>
         /// <param name="testResult">Output from testrunner</param>
-        /// <param name="mutation"></param>
-        /// <param name="mutatedCode"></param>
-        /// <param name="originalCode"></param>
-        private static void ReportResult(ReportBuilder reportBuilder, string testResult, MutationReporter mutationReporter)
+        /// <param name="mutationReporter">Reporter to pass on report data</param>
+        private static void ReportResult(ReportBuilder reportBuilder, string testResult, MutationReporter mutationReporter, MatchCollection originalTestResult)
         {
             var parsedResults = TestResultParser.ParseResults(testResult);
 
+            var x = IsMutationKilled(originalTestResult, parsedResults);
             string testOutcome = parsedResults.First().Groups[1].Value;
 
             reportBuilder.AddTestResult(mutationReporter.GetMutation().Name, testOutcome, mutationReporter.GetOriginalCode(), mutationReporter.GetMutatedCode());
+        }
+
+        private static bool IsMutationKilled(MatchCollection originalTestResult, MatchCollection mutationTestResults)
+        {
+            for(int i = 0; i < originalTestResult.Count(); i++)
+            {
+                var match = originalTestResult[i];
+                var mutationMatch = mutationTestResults[i];
+
+                if (match.Groups[0].Value == mutationMatch.Groups[0].Value)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

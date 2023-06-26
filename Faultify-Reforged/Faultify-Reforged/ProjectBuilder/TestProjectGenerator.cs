@@ -14,7 +14,7 @@ namespace Faultify_Reforged.Core.ProjectBuilder
 {
     internal class TestProjectGenerator
     {
-        public static IProjectInfo GenerateTestProject(string solutionPath,string testProjectPath)
+        public static IProjectInfo GenerateTestProject(string testProjectPath)
         {
 
             var analyzerManager = new AnalyzerManager();
